@@ -1,0 +1,71 @@
+	/*Pattern m_timePatt1 = Pattern.compile("２０(?:０|１|２|３|４|５|６|７|８|９){2}(?:－|／|．)(?:０|１|２|３|４|５|６|７|８|９){1,2}(?:－|／|．)(?:０|１|２|３|４|５|６|７|８|９){1,2}"); // 2017/01/01，2017.01.01，2017-01-01
+	Pattern m_timePatt2 = Pattern.compile("(?:０|１|２|３|４|５|６|７|８|９){2}(?:－|／|．)(?:０|１|２|３|４|５|６|７|８|９){1,2}(?:－|／|．)(?:０|１|２|３|４|５|６|７|８|９){1,2}"); // 17-07-01
+	Pattern m_timePatt3 = Pattern.compile("２０(?:０|１|２|３|４|５|６|７|８|９){2}年(?:０|１|２|３|４|５|６|７|８|９){1,2}月(?:０|１|２|３|４|５|６|７|８|９){1,2}日"); // 2017年07月01日
+	Pattern m_timePatt4 = Pattern.compile("２０(?:０|１|２|３|４|５|６|７|８|９){2}年(?:０|１|２|３|４|５|６|７|８|９){1,2}月"); // 2017年07月
+	Pattern m_timePatt5 = Pattern.compile("(?:０|１|２|３|４|５|６|７|８|９){1,2}(?:年|月)(?:０|１|２|３|４|５|６|７|８|９){1,2}(?:月|日)"); // 07月01日
+	Pattern m_timePatt6 = Pattern.compile("((?!０|１|２|３|４|５|６|７|８|９){1,}?|(?:　)+|^)２０(?:０|１|２|３|４|５|６|７|８|９){2}(?:－|／|．)(?:０|１|２|３|４|５|６|７|８|９){1,2}((?!０|１|２|３|４|５|６|７|８|９){1,}?|(?:　)+|$)"); // 2017.07
+	Pattern m_timePatt7 = Pattern.compile("今天(?:　)*?(?:０|１|２|３|４|５|６|７|８|９){1,2}：(?:０|１|２|３|４|５|６|７|８|９){1,2}"); // 今天 10:00
+	Pattern m_timePatt8 = Pattern.compile("((?!０|１|２|３|４|５|６|７|８|９){1,}?|(?:　)+|^)(?:０|１|２|３|４|５|６|７|８|９){1,2}(?:－|／|：)(?:０|１|２|３|４|５|６|７|８|９){1,2}((?!０|１|２|３|４|５|６|７|８|９){1,}?|(?:　)+|$)"); // 07.07，或者10:30
+	Pattern m_timePatt9 = Pattern.compile("(?:０|１|２|３|４|５|６|７|８|９){1,2}分钟前");
+	Pattern m_timePatt10 = Pattern.compile("(?:０|１|２|３|４|５|６|７|８|９){1,2}(?:分|秒|小|时|天|周|月|年)前"); // 10秒前 */
+	(?:－|／|．)对应GBK：\\xA3[\\xAD\\xAE\\xAF]
+	(?:－|／|：)对应：\\xA3[\\xAD\\xAE\\xAF\\xBA]
+	0-9对应的GBK是：\\xA3[\\xB0-\\xB9]
+	Pattern m_timePatt1 = Pattern.compile("２０(?:\\xA3[\\xB0-\\xB9]){2}\\xA3[\\xAD\\xAE\\xAF](?:\\xA3[\\xB0-\\xB9]){1,2}\\xA3[\\xAD\\xAE\\xAF](?:\\xA3[\\xB0-\\xB9]){1,2}"); // 2017/01/01，2017.01.01，2017-01-01
+	Pattern m_timePatt3 = Pattern.compile("２０(?:\\xA3[\\xB0-\\xB9]){2}年(?:\\xA3[\\xB0-\\xB9]){1,2}月(?:\\xA3[\\xB0-\\xB9]){1,2}日"); // 2017年07月01日
+	Pattern m_timePatt2 = Pattern.compile("(?:\\xA3[\\xB0-\\xB9]){2}\\xA3[\\xAD\\xAE\\xAF](?:\\xA3[\\xB0-\\xB9]){1,2}\\xA3[\\xAD\\xAE\\xAF](?:\\xA3[\\xB0-\\xB9]){1,2}"); // 17-07-01
+	Pattern m_timePatt4 = Pattern.compile("２０(?:\\xA3[\\xB0-\\xB9]){2}年(?:\\xA3[\\xB0-\\xB9]){1,2}月"); // 2017年07月
+	Pattern m_timePatt5 = Pattern.compile("(?:\\xA3[\\xB0-\\xB9]){1,2}月(?:\\xA3[\\xB0-\\xB9]){1,2}日"); // 07月01日
+	Pattern m_timePatt6 = Pattern.compile("((?!\\xA3[\\xB0-\\xB9]){1,}?|(?:\\xA1\\xA1)+|^)２０(?:\\xA3[\\xB0-\\xB9]){2}\\xA3[\\xAD\\xAE\\xAF](?:\\xA3[\\xB0-\\xB9]){1,2}((?!\\xA3[\\xB0-\\xB9]){1,}?|(?:\\xA1\\xA1)+|$)"); // 2017.07
+	Pattern m_timePatt7 = Pattern.compile("今天(?:\\xA1\\xA1)*?(?:\\xA3[\\xB0-\\xB9]){1,2}：(?:\\xA3[\\xB0-\\xB9]){1,2}"); // 今天 10:00
+	Pattern m_timePatt8 = Pattern.compile("((?!\\xA3[\\xB0-\\xB9]){1,}?|(?:\\xA1\\xA1)+|^)(?:\\xA3[\\xB0-\\xB9]){1,2}\\xA3[\\xAD\\xAE\\xAF\\xBA](?:\\xA3[\\xB0-\\xB9]){1,2}((?!\\xA3[\\xB0-\\xB9]){1,}?|(?:\\xA1\\xA1)+|$)"); // 07.07，或者10:30
+	Pattern m_timePatt9 = Pattern.compile("(?:\\xA3[\\xB0-\\xB9]){1,2}分钟前");
+	Pattern m_timePatt10 = Pattern.compile("(?:\\xA3[\\xB0-\\xB9]){1,2}(?:分|秒|小|时|天|周|月|年)前"); // 10秒前
+	
+	
+	Pattern m_urlTimePatt1 = Pattern.compile(""); // 为了避免误识别数字字符串，目前仅考虑20开头的日期字符串
+	
+//	(?:分页|分頁|总页|總頁|返回列表)
+//	(?:共[\s\d]+页|第[\s\d]+页|共[\s\d]+頁|第[\s\d]+頁|go|GO)
+//	(?:末页|末頁|尾页|尾頁)
+//	(?:&lt;|<)*\s*(?:上一|前一|pre)
+//	(?:下一|後一|next|后一)\s*(?:&gt;|>)*
+	Pattern m_totalPagePatt = Pattern.compile("(?:分页|总页|返回列表)");
+	Pattern m_nthPagePatt = Pattern.compile("(?:共|第)(?:０|１|２|３|４|５|６|７|８|９|　){1,}页");
+	// (?:０|１|２|３|４|５|６|７|８|９|　)
+	Pattern m_lastPagePatt = Pattern.compile("(?:末页|尾页)");
+	Pattern m_prePagePatt = Pattern.compile("(?:＜)*(?:　)*(?:上一|前一|ｐｒｅ)");
+	Pattern m_nextPagePatt = Pattern.compile("(?:下一|ｎｅｘｔ|后一)(?:　)*(?:＞)*");
+	
+	＄。！％，；？对应A1E7 A1A3 A3A1 A3A5 A3AC A3BB A3BF
+	\\xA1[\\xE7\\xA3]|\\xA3[\\xA1\\xA5\\xAC\\xBB\\xBF\\xB0-\\xB9]
+	Pattern m_pattPuncForRecommend = Pattern.compile("(?:！|＄|％|，|；|？|。|０|１|２|３|４|５|６|７|８|９){1,}");
+	Pattern m_pattPuncForRecommend_Ex = Pattern.compile("(?:！|；|？|。|％|（|）){1,}"); // 这个是可以包含数字的
+	
+	// 针对字符串推荐的标点符号过滤
+	）（％！？；对应\\xA3[\\xA9\\xA8\\xA5\\xA1\\xBF\\xBB]
+	＄。A1E7 A1A3
+	\\xA3[\\xB0-\\xB9\\xA9\\xA8\\xA5\\xA1\\xBF\\xBB]|\\xA1[\\xE7\\xA3]
+	Pattern m_pattPuncForRecommend_Str = Pattern.compile("(?:！|；|？|。|％|（|）|＄|０|１|２|３|４|５|６|７|８|９){1,}"); // 这个是可以包含数字的
+	// 针对bbs识别的正则匹配
+//	^[\[\]\(\)（）【】\s\*：:#]*(?:楼主|樓主)[\[\]\(\)（）【】\s\*：:#]*$
+//	(?:\d楼|\d#|#\d|\d樓|楼层|板凳|沙发|地板|樓層|板凳|沙發)
+//	[\[\]\(\)（）【】\-+\s\d]*(?:积分|積分)[\[\]\(\)（）【】:：\-+\s\d]*
+//	(?:发帖|發帖|置顶|置頂)
+//	只看[\s\S]*?(?:作者|楼主|此人|用户|他|TA|ta|Ta|作者|樓主|用戶)
+［］＊（？：楼主｜楼主）［＊＄＂）；
+【】［］（）＊：＃对应A1BE A1BF A3DB A3DD A3A8 A3A9 A3AA A3BA A3A3
+\\xA1[\\xA1\\xBE\\xBF]|\\xA3[\\xDB\\xDD\\xA8\\xA9\\xAA\\xBA\\xA3]
+	Pattern m_lzBBSPatt = Pattern.compile("(?!［|］|（|）|【|】|　|＊|：|＃)*楼主(?:［|］|（|）|【|】|　|＊|：|＃)*$");
+	Pattern m_nfloorBBSPatt = Pattern.compile("(?:(?:０|１|２|３|４|５|６|７|８|９)(?:楼|＃)|＃(?:０|１|２|３|４|５|６|７|８|９)|楼层|板凳|沙发|地板)");
+	【】［］（）－＋对应：A1BE A1BF A3DB A3DD A3A8 A3A9 A3AD A3AB
+	【】［］（）－＋对应：\\xA3[]
+	Pattern m_scoreBBSPatt = Pattern.compile("(?:［|］|（|）|【|】|－|＋|　|０|１|２|３|４|５|６|７|８|９)*积分(?:|［|］|（|）|【|】|：|－|＋|　|０|１|２|３|４|５|６|７|８|９)*");
+	Pattern m_postBBSPatt = Pattern.compile("(?:发帖|置顶)");
+	Pattern m_onlyReadBBSPatt = Pattern.compile("只看[\\s\\S]*?(?:作者|楼主|此人|用户|他|ＴＡ|ｔａ|Ｔａ)");
+	
+	// 判断是否是表情时，用到的正则表达式
+	"^:[\\da-zAZ\\-\\s:\\]\\[\\)\\(]+$"
+	［：］）（－：A3DB A3BA A3DD A3A9 A3A8 A3AD
+	^：(?:\\xA3(?:[\\xC1-\\xDA]|[\\xE1-\\xFA]|[\\xDB\\xBA\\xDD\\xA9\\xA8\\xAD])|\\xA1\\xA1)+$
+	Pattern m_pattFace = Pattern.compile("^：(?:ａ|ｂ|ｃ|ｄ|ｅ|ｆ|ｇ|ｈ|ｉ|ｊ|ｋ|ｌ|ｍ|ｎ|ｏ|ｐ|ｑ|ｒ|ｓ|ｔ|ｕ|ｖ|ｗ|ｘ|ｙ|ｚ|Ａ|Ｂ|Ｃ|Ｄ|Ｅ|Ｆ|Ｇ|Ｈ|Ｉ|Ｊ|Ｋ|Ｌ|Ｍ|Ｎ|Ｏ|Ｐ|Ｑ|Ｒ|Ｓ|Ｔ|Ｕ|Ｖ|Ｗ|Ｘ|Ｙ|Ｚ|－|　|：|］|）|（)+$");

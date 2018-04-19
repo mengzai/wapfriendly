@@ -1,0 +1,42 @@
+看一下推荐相关的特征：
+http://001sf.ca/news/html/?1353.html
+http://2.suning.com/getItemDetail/6073961158/145628011604593758.htm（电商类的站点，提取效果不好，主要是没有规律可言，需要增加文件名有意义概率的判断）
+
+这种类型的页面识别不了。。。
+http://2t.5068.com/pic/162228_10.html（页面是一个列表，但是有多张小图，小图是正文，但是需要点击以后才行，点击后跳转到其他页面，目前这种小图被识别为正文）
+http://365jia.cn/news/images/2012-10-19/A75E1795ADC79695_2.html
+http://album.zhenai.com/u/80117221
+http://album.zhenai.com/u/81920959
+
+http://a.9game.cn/zhenhunjie/576468.html（标题上面的被提取了）
+http://agent.jc001.cn/detail/174281.html（有logo字样，不过是大写的，比较时，是否都转换成小写了）
+标注错误：
+http://203585www.studentart.com.cn/arts/artwork/detail/16883
+http://9night.kimiss.com/thread-1504450-1-1.html
+http://9yin.17173.com/content/2014-01-03/20140103102013174_all.shtml
+
+04-14 13:50，这个时间识别上是有问题的吧。。如果将空格都剔除了，会不会有问题
+
+增加一下标题粗识别，同时，增加图片在标题上方还是标题下方
+增加一下具有跳转链接的密度块，统计块级别的，主要是a标签的href不是本页面的，分strict和松散的
+增加一下pic url name的正常概率值
+增加一下图片宽度大于小于某一个阈值，而不是用区间范围
+
+增加display属性的判断，为none的，直接过滤
+
+
+该页面不能访问，将其从对应的page url中剔除掉
+http://auto.chinaso.com/photo/detail/20151120/1000100003260901447987798910423539_1.html
+
+block中超链接的文本密度，而不是周围文本
+父结点的解析宽度和高度也算进去
+
+宽度和高度如果是100%，不用算值，就当是不存在
+
+http://bbs.dospy.com/thread-8483188-1-963-1.html
+这个url中，has_real_src好像没有起作用。具体看下。还有avatar表示头像，这个特征的权重看下
+
+专门针对头像附近的图片，被误识别，进行处理
+
+平滑处理，如果只在block之间进行处理，如何（这个最后进行实验）
+只在block中，对于路径一样的图片进行平滑，http://www/xxx1/xxx2/xxx3/1.html，只比较xxx1/xxx2/xxx3
