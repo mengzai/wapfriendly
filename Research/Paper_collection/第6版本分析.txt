@@ -1,0 +1,45 @@
+block级别的
+
+img级别
+
+int[]
+
+// 推荐文本判断放到textitem中，
+int[0]=1;
+text > 
+
+利用唯一id/class/name对div、ul、table进行分块。（已验证）
+对于comment，如果comment_text长度比较长，则不认为是block标识（已验证）
+元素前后都增加，即div和/div都属于div元素（已验证）
+
+alt属性相同的最大数量（只计算大于等于3个的block）
+subpath连续相同的最大数量严格相同（计算大于等于3个的）
+subpath连续相同的最大数量松散相同（计算大于等于5个的）// 考虑从最长名字的路径处开始
+含有的center的图片文本数，同时该值进行页面最大化
+
+检查下catch是否没有抛异常
+
+计算文本变化方差时，减少对img个数的限制
+
+是否是center图片
+是否含有id属性
+是否含有不含数字的id属性
+pic url是否包含时间字符串
+增加图片是否在article标签下
+加规则，宽度和高度的大图规则（当高或者宽大于某一个阈值，同时高宽相乘大于指定值时强制召回）
+直接召回：宽：570,高：430
+
+
+
+看下新的分块模式，是否对现有特征产生影响。
+
+tuku.17house.com（这个全不做评价）
+
+统计table、div、ul、p、tr、td、th、li、ol、span
+
+验证居中的：
+http://www.mnw.cn/keji/internet/1547369.html
+http://beijing.auto.sohu.com/20121030/n356107160.shtml
+http://www.qiyenet.net/article/2016-03-30/show297099.html
+
+http://ent.qq.com/a/20100601/000417.htm

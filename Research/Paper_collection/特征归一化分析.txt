@@ -1,0 +1,75 @@
+统计下推荐词相关的密度
+统计下推荐词所在位置信息
+目前surr text的方差计算以及图片密度计算，暂时是采用3个text和2个pic
+
+进行相除操作的，即小于1的值
+relative_pos
+relative_block_pos
+img_block_a_density
+img_block_li_density
+img_block_time_density
+img_path_digital_char_ratio
+img_alt_html_title_similarity，标题为空时，该值为1，需要考虑
+img_width_height_ratio
+img_width_level
+img_height_level
+img_density
+
+不进行归一化：
+img_body_a_cnt
+img_body_li_cnt
+img_body_time_cnt
+img_path_digital_cnt，看下分布
+img_subpath_digital_cnt
+img_subpath_cnt
+img_alt_title_chinese_cnt
+// h，p，div等的个数，应该是和全局（body）比较，还是和最大值进行比较？
+文本数和长度相关的应该进行平滑
+
+这些特征需要进行平滑
+		public static String stop_word_ratio = "stop_word_ratio";
+		public static String link_to_text_ratio = "link_to_text_ratio";
+		public static String average_sentence_length="average_sentence_length";
+		public static String number_of_words = "number_of_words";
+		// public static String number_of_date = "number_of_date";
+		public static String number_of_punctuation = "punctuation_cnt";
+		// 新增（这两个元素不区分pre和after）
+		public static String var_surr_text = "var_surr_text"; // 图片周围文本的变化方差，这个需要开一个窗口
+
+这些特征需要进行归一化：
+		// 元素的个数，可以最大值正则化，因为这样可以强调相应的元素所在block中的img元素。
+		public static String h_cnt="h_cnt";
+		public static String h1_cnt = "h1_cnt";
+		public static String h2_cnt = "h2_cnt";
+		public static String h3_cnt = "h3_cnt";
+		public static String h4_cnt = "h4_cnt";
+		public static String h5_cnt = "h5_cnt";
+		public static String h6_cnt = "h6_cnt";
+		public static String input_cnt = "input_cnt";
+		public static String select_cnt = "select_cnt";
+		public static String form_cnt = "form_cnt";
+		public static String option_cnt = "option_cnt";
+		public static String tr_cnt = "tr_cnt";
+		// public static String td_th_cnt = "td_th_cnt"; // 不统计td/th，而是改为统计tr
+		public static String table_cnt = "table_cnt";
+		public static String p_cnt = "p_cnt";
+		public static String div_cnt = "div_cnt";
+		public static String ul_cnt = "ul_cnt";
+		public static String ol_cnt = "ol_cnt";
+		public static String li_cnt = "li_cnt"; // 对于连续，且长度小于一定值的，合并为一个。(这个目前实现困难，暂时没有实现，对于a标签需要同样处理)
+		public static String a_cnt = "a_cnt"; // link density:a标签/全文a标签的数量
+
+		public static String tag_cnt = "tag_cnt";
+		public static String h_distance = "h_distance";
+		public static String br_cnt = "br_cnt";
+		
+		// 统计text时，需要去除&nbsp;这类的字符
+		public static String link_to_text_ratio = "link_to_text_ratio"; // 定位本页面最大值，所以需要归一化
+		public static String average_sentence_length="average_sentence_length";
+		public static String number_of_words = "number_of_words";
+		public static String number_of_punctuation = "punctuation_cnt";
+		// 新增（这两个元素不区分pre和after）
+		public static String var_surr_text = "var_surr_text"; // 图片周围文本的变化方差，这个需要开一个窗口
+		// 可以统计下连续图片的密度，以text问分割间隔（注意去除&nbsp;），让后看看连续的图片密度。这个是有影响的（这个特征主要是用来召回连续图片，中间无文本的情况和图片分布比较密集的情况）
+		// 只考虑text和img，统计img往前5个和往后5个元素中，包含的img的个数
+		public static String img_density = "img_density"; // 这个也需要归一化

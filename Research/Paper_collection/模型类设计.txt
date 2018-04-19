@@ -1,0 +1,134 @@
+text中的时间字符串判断，需要验证，是否需要采用全新的
+
+block只增加最后一个blockitem用来强制结尾
+img计算环绕tag count分布时，不采用原先的逻辑，而是采用遇到IMG或者block即终止的逻辑。之前的是遇到IMG时，如果中间没有文本，则继续往前遍历。这样感觉不好。
+h_distance这个特征暂时舍弃不用
+遇到article直接视为block，同时对于保留的tag，如果id不包含数字，则视为block
+不通过class和name的唯一性来进行分块。只通过具有不带数字id的div/table/ul/p进行分块。
+
+data_pos是从0开始计算，看一下原始逻辑
+
+DataItemType.h
+
+block级别的元素统计
+
+推荐/path/class的global特征放到单独的数据结构中。其他global用全局变量定义
+推荐、path等global特征，用char保存。后期如果需要优化，采用位运算。
+推荐文本相关，pic url的path特征和class id特征
+推荐和clas、path的特征单独进行值计算。
+
+（成员变量）1、计算tag的数量。保存到stl<stl>中
+（成员变量）2、计算img前后文本的变化和img前后文本的方差变化和图片密度。保存到stl<stl>中
+（成员变量）4、img自身的一些特征属性，不依赖其他的值。保存到stl<stl>中
+平滑和归一化，对不同类型的特征分别执行，这样后期变动时，耦合度低。
+
+5、block级别的元素统计（需要单独放，节省空间）
+（成员变量，定义一个结构体）6、全局相关的特征：页面中总页码数/下一页/最长文本的位置相关特征（放到一个单独的结构中）
+第一遍，计算全局相关的特征，以及统计block数、有pic的block列表和pic列表。
+第二遍，计算所有的特征
+第三遍：只对pic进行平滑和归一化
+只对有pic的block进行平滑和归一化。
+第四遍：进行预测。
+第五遍：进行规则处理。
+8、global相关的特征
+9、对特征进行平滑和归一化
+10、对预测数据进行规则化
+
+
+
+只判断text，
+
+把block特征放到block结构体中
+
+1、需要保存长度小于60的comment内容
+2、需要统计img的属性总数和非常规属性总数以及是否来自real src属性。
+3、图片是否可见，目前的逻辑有问题，需要增加对visiable以及display属性的判断。父结点的属性值对该值有影响
+4、算dom_height时，不考虑td和th，同时也不保存td和th元素，只是计算其属性值（主要是宽度和是否隐藏）。
+
+class BaseItem{
+	int tag;
+	int dom_height; // 就是level值
+	int ori_pos; // 在原始数组中的位置
+	int kind;
+};
+// textitem文本全都是空白符，则不计算该textitem，类似&nbsp;也属于空白符
+class TextItem{
+	// string text; // 需要将将&nbsp;替换成空格，文本信息不进行存储
+	int len_without_whitespace; // 没有空白符（空格\TAB\换行等）的字符个数
+	int sentence_count; // 句子个数
+	int[] sentence_len; // 每个句子对应的长度
+	int stopwords_count; // 停用词的个数
+	int punctuation_count; // 标点符号数
+	int word_count; // 此处word是指独立的单词或者单个汉字。比如：你youYou他12，wordCount是5，区分大小写
+	boolean is_link; // 是否是超链接中的文本
+	int data_pos; // 在BaseItem数组中，仅统计img和text时，text所在的位置
+	int data_pos_in_block; // 元素在block中的位置
+	// block_pos，元素在第几个block中
+	int block_pos;
+	
+	
+	boolean is_time; // 是否是时间字符串（只判断len_withoutSpace小于30的文本）
+	
+	// 关于判断该文本是否页码相关文本，均利用正则表达式判断，只处理长度小于10的文本
+	int is_total_page_text;
+	int is_below_total_page_text;
+	int is_nth_page_text;
+	int is_last_page_text;
+	int is_pre_page_text;
+	int is_next_page_text;
+	
+	// 关于论坛的关键词特征，只处理小于15的文本
+	int is_lz_bbs_count; 
+	int is_nfloor_bbs_count;
+	int is_score_bbs_count;
+	int is_post_bbs_count = "post_bbs_count";
+	int is_only_read_bbs_count = "only_read_bbs_count";
+	// 只处理小于15的文本。&gt;和>均表示面包屑
+	int is_crumb;
+	boolean is_center;
+	
+	int[] hit_recommend_patt; // 命中的推荐正则文本
+	int[] hit_recommend_str; // 命中的推荐字符串文本
+};
+
+class ImgItem{
+	string pic_url;
+	string alt;
+	int abnormal_attr_count; // 非常规属性的个数。 // 有一个定义好的常规属性列表，不在该列表中的属性均为非常规属性。
+	int all_attr_count; // 所有属性的个数
+	int has_real_src; // 是否包含real_src属性
+	
+	int subpath_count; // 路径的个数。比如http://www.sogou.com/zhaopin/2017/01/1.jpg，则路径是：zhaopin，2017,01，共计3个。
+	int digital_subpath_count; // 数字路径的个数，比如http://www.sogou.com/zhaopin/2017/01/1.jpg，则数字路径的个数是2。
+	int path_digital_count; // path中的数字个数
+	int path_len; // 路径中所有的字符数，不计算“/”
+	int max_subpath_len; // 最长的subpath的长度
+	
+	int pic_name_len; // 文件名长度比较特殊，包含长度比较长的子路径，比如，http://mmbiz.qpic.cn/mmbiz/ictpkX0icVGXiakM2E7RBrSyLREZldCmTyDIYjuPCEsbYeueGOnmh7iaQEshBRzUtpQZ0ED2yMoib8WPUqVmhVF1FeA/640
+	int alt_chinese_count; // alt属性中汉字的个数
+	int alt_none_chinese_count; // alt属性中非汉字的个数
+	int alt_is_abnormal; // alt是否是表情，下一页等文本
+	double similarity_alt_html_title; // alt属性和content title/html title相似性，哪个大取哪个
+	
+	int ext_name_kind; // pic url中的后缀名的类型。
+	
+	int is_link; // 是否是超链接图片
+	int strict_same_link_and_page; // 图片超链接url和当前page url，是否严格一样
+	int relax_same_link_and_page; // 图片超链接url和当前page url是否松相似。
+	
+	int is_hidden;
+	
+	int width;
+	int height;
+	int[] class_id_hit; // img的class名字命中的特征
+	int[] subpath_hit; // subpath命中的特征
+	int is_center;
+	boolean is_in_article; // 是否在acrticle标签内
+	boolean is_contain_time_path; // pic路径中是否包含时间字符串
+	boolean has_attr_id;
+	boolean has_attr_id_none_digital; // 是否包含非数字的id属性值
+};
+
+ElementItem{};
+BlockItem{
+};
